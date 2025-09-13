@@ -1,25 +1,11 @@
-/*
-    Interquartile Range
-
-    Given a sorted singly linked list without a tail (e.g, head -> 1 -> 2 -> 3 -> 4), 
-    return the interquartile range of the data set using the slow and fast pointer 
-    approach OR using a methodology that does not iterate over the linked list 
-    twice. You must not iterate over the entire linked list more than once and you 
-    cannot use arrays, vectors, lists or an STL implementation of List ADT in this problem.
-
-    Sample Input:
-        2 4 4 5 6 7 8
-    
-    Sample Output:
-        3.00 
-*/
-
 #include <iostream>
 #include <iomanip>
 
+// Peter Yungman was my partner
+
 class Node {
     public:
-        int value;
+        float value;
         Node* next = nullptr;
 };
 
@@ -41,6 +27,39 @@ Node* insertEnd(Node* head, int key)
 
 float interQuartile(Node* head)
 {
-    //code here
+  Node* p1 = head;
+  Node* p3 = head->next->next;
+  Node* p4 = head->next->next->next;
+  while (p4 && p4->next && p4->next->next && p4->next->next->next && p4->next->next->next->next){
+    p1 = p1->next;
+    p3 = p3->next->next->next;
+    p4 = p4->next->next->next->next;
+  }
+  int count = 0;
+  while(p4->next!=nullptr){
+    count++;
+    p4=p4->next;
+  }
+  if (count == 0){ // TYPE 1
+    float q1 = (p1->value+p1->next->value)/2;
+    float q3 = (p3->value+p3->next->value)/2;
+    return q3-q1;
+  }
+  if (count == 1){
+    float q1 = (p1->value+p1->next->value)/2;
+    float q3 = (p3->next->value+p3->next->next->value)/2;
+    return q3-q1;
+  }
+  if (count == 2){
+    float q1 = (p1->next->value);
+    float q3 = (p3->next->next->value);
+    return q3-q1;
+  }
+  if (count == 3){
+     float q1 = (p1->next->value);
+    float q3 = (p3->next->next->next->value);
+    return q3-q1;
+  }
+    
     return 0.0;   
 }
